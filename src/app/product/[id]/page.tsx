@@ -258,10 +258,10 @@ export default function ProductPage() {
         <div className="flex flex-col">
           {(product.id === "1" 
             ? [
-                { img: "/images/pralines-inside.jpeg", type: "lifestyle" },
-                { img: "/images/royal-chocobox-review.jpeg", type: "screenshot" },
-                { img: "/images/review-2.jpeg", type: "screenshot" },
-                { img: "/images/review-3.jpeg", type: "screenshot" },
+                { img: "/images/pralines-inside.jpeg", type: "lifestyle", review: undefined, author: undefined },
+                { img: "/images/royal-chocobox-review.jpeg", type: "screenshot", review: undefined, author: undefined },
+                { img: "/images/review-2.jpeg", type: "screenshot", review: undefined, author: undefined },
+                { img: "/images/review-3.jpeg", type: "screenshot", review: undefined, author: undefined },
               ]
             : [
                 { img: "https://picsum.photos/seed/chocoreview1/1200/800", type: "review", review: "Qualité exceptionnelle ! Le meilleur chocolat que j'ai jamais goûté.", author: "Amina T." },
