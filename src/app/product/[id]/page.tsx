@@ -151,10 +151,41 @@ export default function ProductPage() {
               <h1 className="text-4xl lg:text-5xl font-serif text-brand-purple tracking-wide mb-2 leading-tight">{product.name}</h1>
               {product.nameAr && <p className="text-2xl font-serif text-brand-gold/80 mb-6" dir="rtl">{product.nameAr}</p>}
               
-              <div className="flex items-end gap-4 mb-8 pb-8 border-b border-brand-lavender/20">
+              <div className="flex items-end gap-4 mb-6 pb-6 border-b border-brand-lavender/20">
                 <span className="text-3xl font-light text-brand-gold">{product.price} MAD</span>
                 {product.originalPrice && <span className="text-lg text-brand-purple/30 line-through mb-1">{product.originalPrice} MAD</span>}
               </div>
+
+              {/* Scarcity Offer Card */}
+              <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="mb-8 p-4 bg-brand-gold/5 rounded-2xl border border-brand-gold/20 flex flex-col gap-3 shadow-sm shadow-brand-gold/5"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-gold"></span>
+                    </span>
+                    <span className="text-xs font-semibold tracking-wider text-brand-gold uppercase">Offre Limitée</span>
+                  </div>
+                  <span className="text-xs text-brand-purple/70 font-medium">Seulement 50 coffrets disponibles ce mois-ci</span>
+                </div>
+                <div className="w-full bg-brand-lavender/20 h-1.5 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: "84%" }}
+                    transition={{ duration: 1.8, ease: "easeOut", delay: 0.3 }}
+                    className="bg-brand-gold h-full rounded-full" 
+                  />
+                </div>
+                <div className="flex justify-between text-[11px] text-brand-purple/60 font-light">
+                  <span className="flex items-center gap-1">✨ <strong className="font-semibold">42 coffrets</strong> confectionnés et réservés</span>
+                  <span className="font-medium text-brand-gold">8 restants</span>
+                </div>
+              </motion.div>
 
               {/* Description */}
               <p className="text-brand-purple/70 font-light leading-relaxed mb-8">
