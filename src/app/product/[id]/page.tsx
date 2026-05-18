@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Heart, Minus, Plus, Star, Gift, Truck, ShieldCheck, Check, X } from "lucide-react";
-import { getProduct, getRelatedProducts } from "@/lib/data";
+import { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart-store";
 import { ProductCard } from "@/components/product-card";
 
 export default function ProductPage() {
   const params = useParams();
   const id = params?.id as string;
-  const product = getProduct(id);
-  const relatedProducts = getRelatedProducts(id, 4);
+  
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   
   const [qty, setQty] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
@@ -23,9 +25,49 @@ export default function ProductPage() {
   
   const { addItem, toggleWishlist, isInWishlist } = useCart();
 
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    fetch(`/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.id) {
+          setProduct(data);
+          // Fetch related products
+          fetch("/api/products")
+            .then((res) => res.json())
+            .then((allProducts) => {
+              if (Array.isArray(allProducts)) {
+                const related = allProducts.filter(
+                  (p) => p.id !== id && (p.collection === data.collection || p.category === data.category)
+                ).slice(0, 4);
+                setRelatedProducts(related);
+              }
+            })
+            .catch(console.error);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to load product:", error);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center py-32 bg-brand-offwhite">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-brand-purple border-t-transparent animate-spin" />
+          <p className="text-brand-purple/60 font-light tracking-widest text-xs uppercase animate-pulse">Chargement de votre coffret...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
-      <div className="flex-1 flex items-center justify-center py-32">
+      <div className="flex-1 flex items-center justify-center py-32 bg-brand-offwhite">
         <div className="text-center">
           <h1 className="text-2xl text-brand-purple font-light mb-4">Produit Introuvable</h1>
           <p className="text-brand-purple/60">La pièce exquise que vous recherchez est actuellement indisponible.</p>
