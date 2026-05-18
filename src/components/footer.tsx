@@ -82,12 +82,14 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Suivez-nous sur Instagram"
                 className="w-10 h-10 rounded-full border border-brand-lavender/20 flex items-center justify-center text-brand-lavender/50 hover:text-brand-gold hover:border-brand-gold/50 transition-all duration-300"
               >
                 <Camera className="w-4 h-4" />
               </a>
               <a
                 href="mailto:hello@chocobox.com"
+                aria-label="Envoyez-nous un e-mail"
                 className="w-10 h-10 rounded-full border border-brand-lavender/20 flex items-center justify-center text-brand-lavender/50 hover:text-brand-gold hover:border-brand-gold/50 transition-all duration-300"
               >
                 <Mail className="w-4 h-4" />
@@ -96,6 +98,7 @@ export function Footer() {
                 href="https://wa.me/971500000000"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Contactez-nous sur WhatsApp"
                 className="w-10 h-10 rounded-full border border-brand-lavender/20 flex items-center justify-center text-brand-lavender/50 hover:text-brand-gold hover:border-brand-gold/50 transition-all duration-300"
               >
                 <Phone className="w-4 h-4" />

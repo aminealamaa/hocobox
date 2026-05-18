@@ -336,11 +336,15 @@ export default function ProductPage() {
             >
               {item.type === "screenshot" ? (
                 <div className="w-full max-w-lg px-4 md:px-0">
-                  <img 
-                    src={item.img} 
-                    alt="Client Review WhatsApp" 
-                    className="w-full h-auto object-contain rounded-xl md:rounded-3xl shadow-xl shadow-brand-purple/10 border border-brand-lavender/20"
-                  />
+                  <div className="relative w-full aspect-[9/16] rounded-xl md:rounded-3xl overflow-hidden shadow-xl shadow-brand-purple/10 border border-brand-lavender/20">
+                    <Image 
+                      src={item.img} 
+                      alt="Client Review WhatsApp" 
+                      fill
+                      sizes="(max-width: 768px) 100vw, 512px"
+                      className="object-contain bg-white"
+                    />
+                  </div>
                 </div>
               ) : (
                 <>
