@@ -7,6 +7,7 @@ import { ShoppingBag, Heart, Minus, Plus, Star, Gift, Truck, ShieldCheck, Check,
 import { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart-store";
 import { ProductCard } from "@/components/product-card";
+import Image from "next/image";
 
 export default function ProductPage() {
   const params = useParams();
@@ -90,12 +91,15 @@ export default function ProductPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
-              className="aspect-square rounded-3xl overflow-hidden bg-brand-lavender/5"
+              className="relative aspect-square rounded-3xl overflow-hidden bg-brand-lavender/5"
             >
-              <img 
+              <Image 
                 src={product.images[activeImage]} 
                 alt={product.name} 
-                className="w-full h-full object-cover"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
               />
             </motion.div>
             <div className="grid grid-cols-4 gap-4">
@@ -103,11 +107,17 @@ export default function ProductPage() {
                 <button
                   key={idx}
                   onClick={() => setActiveImage(idx)}
-                  className={`aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
+                  className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
                     activeImage === idx ? "border-brand-gold" : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <Image 
+                    src={img} 
+                    alt="" 
+                    fill 
+                    sizes="25vw"
+                    className="object-cover" 
+                  />
                 </button>
               ))}
             </div>
@@ -332,10 +342,12 @@ export default function ProductPage() {
                 </div>
               ) : (
                 <>
-                  <img 
+                  <Image 
                     src={item.img} 
                     alt="Visual Experience" 
-                    className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
+                    fill
+                    sizes="100vw"
+                    className="object-cover transition-transform duration-[2000ms] group-hover:scale-105"
                   />
                   {item.type === "review" && (
                     <>
