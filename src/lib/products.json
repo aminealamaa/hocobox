@@ -1,0 +1,421 @@
+[
+  {
+    "id": "1",
+    "name": "Royal Chocobox",
+    "nameAr": "شوكوبوكس الملكي",
+    "price": 249,
+    "originalPrice": 340,
+    "description": "Our flagship creation. 25 handcrafted pralines nestled in a velvet-lined box with genuine leather finishing. Each piece tells a story of Moroccan artistry, from the saffron-infused ganache to the rose petal truffles. A gift that speaks of refined taste and timeless elegance.",
+    "shortDescription": "25-piece luxury praline collection in leather box",
+    "images": [
+      "/uploads/msa7_katba_dyal_smiyat.com_202605181051-1779096712447-832267391.webp",
+      "/uploads/badal_smiyat_chocodiamnt.com_bi__202605181116-1779096720761-306868586.webp",
+      "/uploads/Dark_Royal_Purple_White_Lavender_202605181203-1779098642043-726278329.webp",
+      "/uploads/Dark_Purple_White_Lavender_Colors_202605181205-1779098763575-121256776.webp",
+      "/uploads/khali_image_clean_les_chocolate_202605181221-1779099701086-566399361.webp"
+    ],
+    "category": "boxes",
+    "collection": "signature",
+    "tags": [
+      "bestseller",
+      "gift",
+      "premium"
+    ],
+    "ingredients": [
+      "Belgian Dark Chocolate 72%",
+      "Moroccan Argan Oil",
+      "Saffron",
+      "Rose Water",
+      "Pistachio",
+      "Almond",
+      "Honey"
+    ],
+    "weight": "480g",
+    "pieces": 24,
+    "inStock": true,
+    "isBestseller": true,
+    "rating": 4.9,
+    "reviews": 127
+  },
+  {
+    "id": "2",
+    "name": "Saffron & Gold Truffles",
+    "nameAr": "كمأة الزعفران والذهب",
+    "price": 189,
+    "description": "Hand-rolled truffles infused with Persian saffron threads and dusted with 24k edible gold. Each truffle is a moment of pure luxury, melting slowly to reveal layers of dark chocolate and warm spice.",
+    "shortDescription": "12-piece saffron truffles with edible gold",
+    "images": [
+      "https://picsum.photos/seed/chocobox201/600/600",
+      "https://picsum.photos/seed/chocobox202/600/600",
+      "https://picsum.photos/seed/chocobox203/600/600"
+    ],
+    "category": "truffles",
+    "collection": "signature",
+    "tags": [
+      "luxury",
+      "gold"
+    ],
+    "ingredients": [
+      "Dark Chocolate 70%",
+      "Heavy Cream",
+      "Persian Saffron",
+      "24K Edible Gold",
+      "Vanilla Bean"
+    ],
+    "weight": "240g",
+    "pieces": 12,
+    "inStock": true,
+    "isNew": true,
+    "rating": 4.8,
+    "reviews": 89
+  },
+  {
+    "id": "3",
+    "name": "Eid Crescent Gift Set",
+    "nameAr": "طقم هلال العيد",
+    "price": 349,
+    "description": "A crescent-shaped luxury box featuring 36 pieces of our finest chocolates. Wrapped in embossed royal purple with gold calligraphy. The perfect Eid gift for those who appreciate the extraordinary.",
+    "shortDescription": "36-piece crescent box with gold calligraphy",
+    "images": [
+      "https://picsum.photos/seed/chocobox301/600/600",
+      "https://picsum.photos/seed/chocobox302/600/600",
+      "https://picsum.photos/seed/chocobox303/600/600"
+    ],
+    "category": "boxes",
+    "collection": "eid",
+    "tags": [
+      "eid",
+      "gift",
+      "premium"
+    ],
+    "ingredients": [
+      "Milk Chocolate",
+      "Dark Chocolate",
+      "White Chocolate",
+      "Dates",
+      "Pistachio",
+      "Rose",
+      "Orange Blossom"
+    ],
+    "weight": "720g",
+    "pieces": 36,
+    "inStock": true,
+    "rating": 5,
+    "reviews": 64
+  },
+  {
+    "id": "4",
+    "name": "Argan Rose Pralines",
+    "nameAr": "برالين أرغان و ورد",
+    "price": 149,
+    "description": "A delicate fusion of Moroccan argan oil and Damascene rose water, enrobed in silky milk chocolate. Each praline is topped with a crystallized rose petal from the Valley of Roses.",
+    "shortDescription": "9-piece rose-infused pralines",
+    "images": [
+      "https://picsum.photos/seed/chocobox401/600/600",
+      "https://picsum.photos/seed/chocobox402/600/600",
+      "https://picsum.photos/seed/chocobox403/600/600"
+    ],
+    "category": "pralines",
+    "collection": "moroccan",
+    "tags": [
+      "moroccan",
+      "floral"
+    ],
+    "ingredients": [
+      "Milk Chocolate 38%",
+      "Argan Oil",
+      "Rose Water",
+      "Crystallized Rose Petals",
+      "Hazelnut Praline"
+    ],
+    "weight": "180g",
+    "pieces": 9,
+    "inStock": true,
+    "rating": 4.7,
+    "reviews": 52
+  },
+  {
+    "id": "5",
+    "name": "Midnight Noir Collection",
+    "nameAr": "مجموعة نوار منتصف الليل",
+    "price": 219,
+    "description": "For the dark chocolate connoisseur. 16 pieces of single-origin dark chocolate from Madagascar, Ecuador, and Ghana. Each origin brings unique tasting notes — from fruity to smoky, earthy to floral.",
+    "shortDescription": "16-piece single-origin dark chocolate",
+    "images": [
+      "https://picsum.photos/seed/chocobox501/600/600",
+      "https://picsum.photos/seed/chocobox502/600/600",
+      "https://picsum.photos/seed/chocobox503/600/600"
+    ],
+    "category": "boxes",
+    "collection": "signature",
+    "tags": [
+      "dark",
+      "connoisseur"
+    ],
+    "ingredients": [
+      "Single Origin Dark Chocolate (72-85%)",
+      "Cocoa Butter",
+      "Sea Salt",
+      "Tahitian Vanilla"
+    ],
+    "weight": "320g",
+    "pieces": 16,
+    "inStock": true,
+    "isBestseller": true,
+    "rating": 4.9,
+    "reviews": 95
+  },
+  {
+    "id": "6",
+    "name": "Le Jardin Marrakech",
+    "nameAr": "حديقة مراكش",
+    "price": 259,
+    "description": "Inspired by the secret gardens of Marrakech. A curated box of 20 pieces featuring mint, orange blossom, fig, and pomegranate. Presented in a hand-painted ceramic-inspired box.",
+    "shortDescription": "20-piece Marrakech-inspired box",
+    "images": [
+      "https://picsum.photos/seed/chocobox601/600/600",
+      "https://picsum.photos/seed/chocobox602/600/600",
+      "https://picsum.photos/seed/chocobox603/600/600"
+    ],
+    "category": "boxes",
+    "collection": "moroccan",
+    "tags": [
+      "moroccan",
+      "garden",
+      "gift"
+    ],
+    "ingredients": [
+      "Dark Chocolate",
+      "Fresh Mint",
+      "Orange Blossom",
+      "Fig Paste",
+      "Pomegranate",
+      "Pistachio"
+    ],
+    "weight": "400g",
+    "pieces": 20,
+    "inStock": true,
+    "isNew": true,
+    "rating": 4.8,
+    "reviews": 38
+  },
+  {
+    "id": "7",
+    "name": "The Ramadan Lantern",
+    "nameAr": "فانوس رمضان",
+    "price": 399,
+    "originalPrice": 450,
+    "description": "Our most exquisite Eid creation. A lantern-shaped box in brushed gold containing 42 pieces of assorted luxury chocolates, dates, and confections. Each layer reveals a new surprise.",
+    "shortDescription": "42-piece lantern box in brushed gold",
+    "images": [
+      "https://picsum.photos/seed/chocobox701/600/600",
+      "https://picsum.photos/seed/chocobox702/600/600",
+      "https://picsum.photos/seed/chocobox703/600/600"
+    ],
+    "category": "boxes",
+    "collection": "eid",
+    "tags": [
+      "eid",
+      "ramadan",
+      "premium",
+      "gift"
+    ],
+    "ingredients": [
+      "Assorted Chocolates",
+      "Medjool Dates",
+      "Marzipan",
+      "Nougat",
+      "Caramel",
+      "Nuts"
+    ],
+    "weight": "840g",
+    "pieces": 42,
+    "inStock": true,
+    "isLimited": true,
+    "rating": 5,
+    "reviews": 31
+  },
+  {
+    "id": "8",
+    "name": "Petite Fleur",
+    "nameAr": "بوتيت فلور",
+    "price": 89,
+    "description": "A charming 6-piece box perfect for intimate gestures. Features our most popular flavors in a beautifully compact presentation with a hand-tied silk ribbon.",
+    "shortDescription": "6-piece petit collection with silk ribbon",
+    "images": [
+      "https://picsum.photos/seed/chocobox801/600/600",
+      "https://picsum.photos/seed/chocobox802/600/600",
+      "https://picsum.photos/seed/chocobox803/600/600"
+    ],
+    "category": "boxes",
+    "collection": "gifting",
+    "tags": [
+      "petit",
+      "gift",
+      "affordable"
+    ],
+    "ingredients": [
+      "Assorted Chocolates",
+      "Hazelnut",
+      "Caramel",
+      "Vanilla",
+      "Coffee"
+    ],
+    "weight": "120g",
+    "pieces": 6,
+    "inStock": true,
+    "rating": 4.6,
+    "reviews": 143
+  },
+  {
+    "id": "9",
+    "name": "L'Or du Désert",
+    "nameAr": "ذهب الصحراء",
+    "price": 499,
+    "description": "The pinnacle of luxury. 48 pieces of our rarest creations, including truffles with real gold leaf, saffron ganache, and vintage port reduction. Housed in a hand-stitched leather chest.",
+    "shortDescription": "48-piece ultra-premium leather chest",
+    "images": [
+      "https://picsum.photos/seed/chocobox901/600/600",
+      "https://picsum.photos/seed/chocobox902/600/600",
+      "https://picsum.photos/seed/chocobox903/600/600"
+    ],
+    "category": "boxes",
+    "collection": "limited",
+    "tags": [
+      "limited",
+      "ultra-premium",
+      "collector"
+    ],
+    "ingredients": [
+      "Grand Cru Chocolate",
+      "24K Gold Leaf",
+      "Persian Saffron",
+      "Vintage Port",
+      "Tahitian Vanilla",
+      "Fleur de Sel"
+    ],
+    "weight": "960g",
+    "pieces": 48,
+    "inStock": true,
+    "isLimited": true,
+    "rating": 5,
+    "reviews": 12
+  },
+  {
+    "id": "10",
+    "name": "Dates & Chocolate Royale",
+    "nameAr": "تمر وشوكولاتة رويال",
+    "price": 199,
+    "description": "Premium Medjool dates hand-filled with ganache and coated in Belgian chocolate. Topped with almonds, pistachios, and rose petals. A fusion of Arabian tradition and European craft.",
+    "shortDescription": "15-piece chocolate-covered dates",
+    "images": [
+      "https://picsum.photos/seed/chocobox1001/600/600",
+      "https://picsum.photos/seed/chocobox1002/600/600",
+      "https://picsum.photos/seed/chocobox1003/600/600"
+    ],
+    "category": "dates",
+    "collection": "eid",
+    "tags": [
+      "dates",
+      "eid",
+      "traditional"
+    ],
+    "ingredients": [
+      "Medjool Dates",
+      "Belgian Chocolate",
+      "Almonds",
+      "Pistachios",
+      "Rose Petals",
+      "Orange Zest"
+    ],
+    "weight": "375g",
+    "pieces": 15,
+    "inStock": true,
+    "isBestseller": true,
+    "rating": 4.9,
+    "reviews": 78
+  },
+  {
+    "id": "11",
+    "name": "Les Macarons Royaux",
+    "nameAr": "الماكرون الملكي",
+    "price": 169,
+    "description": "Chocolate macarons with unexpected Moroccan twists. Flavors include saffron-white chocolate, argan-dark chocolate, rose-pistachio, and orange blossom-caramel. Presented in a velvet-lined drawer box.",
+    "shortDescription": "12-piece luxury chocolate macarons",
+    "images": [
+      "https://picsum.photos/seed/chocobox1101/600/600",
+      "https://picsum.photos/seed/chocobox1102/600/600",
+      "https://picsum.photos/seed/chocobox1103/600/600"
+    ],
+    "category": "macarons",
+    "collection": "signature",
+    "tags": [
+      "macarons",
+      "french",
+      "moroccan"
+    ],
+    "ingredients": [
+      "Almond Flour",
+      "Chocolate Ganache",
+      "Saffron",
+      "Rose Water",
+      "Argan Oil",
+      "Orange Blossom"
+    ],
+    "weight": "240g",
+    "pieces": 12,
+    "inStock": true,
+    "rating": 4.7,
+    "reviews": 56
+  },
+  {
+    "id": "12",
+    "name": "Corporate Grand Box",
+    "nameAr": "صندوق الأعمال الكبير",
+    "price": 599,
+    "description": "Impress with distinction. 60 assorted luxury pieces in a custom-branded wooden chest. Includes branded ribbon, personalized card, and corporate logo on the box. Minimum order of 5.",
+    "shortDescription": "60-piece corporate luxury chest",
+    "images": [
+      "https://picsum.photos/seed/chocobox1201/600/600",
+      "https://picsum.photos/seed/chocobox1202/600/600",
+      "https://picsum.photos/seed/chocobox1203/600/600"
+    ],
+    "category": "corporate",
+    "collection": "gifting",
+    "tags": [
+      "corporate",
+      "bulk",
+      "branded"
+    ],
+    "ingredients": [
+      "Assorted Premium Chocolates",
+      "Dates",
+      "Macarons",
+      "Truffles"
+    ],
+    "weight": "1200g",
+    "pieces": 60,
+    "inStock": true,
+    "rating": 4.8,
+    "reviews": 24
+  },
+  {
+    "id": "1779094840909",
+    "name": "Nouveau Produit",
+    "price": 0,
+    "description": "",
+    "shortDescription": "",
+    "images": [
+      "https://picsum.photos/seed/new/600/600"
+    ],
+    "category": "boxes",
+    "collection": "signature",
+    "tags": [],
+    "ingredients": [],
+    "weight": "0g",
+    "pieces": 0,
+    "inStock": true,
+    "rating": 5,
+    "reviews": 0
+  }
+]
