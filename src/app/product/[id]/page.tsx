@@ -318,24 +318,14 @@ export default function ProductPage() {
 
       {/* Ingredients & Details */}
       <section className="bg-white py-16 border-y border-brand-lavender/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div>
-              <h3 className="text-lg font-light text-brand-purple tracking-wide mb-6">Ingrédients d'Exception</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.ingredients.map((ing, i) => (
-                  <span key={i} className="bg-brand-offwhite px-4 py-2 rounded-full text-xs text-brand-purple/70 font-light border border-brand-lavender/20">
-                    {ing}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-light text-brand-purple tracking-wide mb-6">Informations sur les Allergènes</h3>
-              <p className="text-sm text-brand-purple/60 font-light leading-relaxed">
-                Contient du lait, du soja et des noix. Peut contenir des traces de gluten. Préparé dans une installation qui manipule des arachides, des noix et des produits laitiers. Pour des exigences alimentaires spécifiques, veuillez contacter notre équipe de conciergerie.
-              </p>
-            </div>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h3 className="text-lg font-light text-brand-purple tracking-wide mb-6">Ingrédients d'Exception</h3>
+          <div className="flex flex-wrap justify-center gap-2">
+            {product.ingredients.map((ing, i) => (
+              <span key={i} className="bg-brand-offwhite px-5 py-2.5 rounded-full text-xs text-brand-purple/70 font-light border border-brand-lavender/20">
+                {ing}
+              </span>
+            ))}
           </div>
         </div>
       </section>
