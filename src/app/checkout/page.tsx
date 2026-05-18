@@ -1,16 +1,53 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useCart } from "@/lib/cart-store";
 import Link from "next/link";
 import { ArrowLeft, Lock, CreditCard, Gift, Truck } from "lucide-react";
+import * as fpixel from "@/lib/fpixel";
 
 export default function Checkout() {
-  const { items, totalPrice } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const [step, setStep] = useState(1);
+  const [purchaseAmount, setPurchaseAmount] = useState(0);
 
-  if (items.length === 0) {
+  // Track InitiateCheckout conversion when user loads the page with items in cart
+  useEffect(() => {
+    if (items.length > 0) {
+      fpixel.event("InitiateCheckout", {
+        content_ids: items.map((item) => item.product.id),
+        num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+        value: totalPrice,
+        currency: "MAD",
+      });
+    }
+  }, []);
+
+  const deliveryFee = totalPrice >= 200 ? 0 : 25;
+  const finalTotal = totalPrice + deliveryFee;
+
+  const handlePayment = () => {
+    // Save total price for the success screen
+    setPurchaseAmount(finalTotal);
+
+    // Track standard Purchase event with Meta Pixel
+    fpixel.event("Purchase", {
+      value: finalTotal,
+      currency: "MAD",
+      content_ids: items.map((item) => item.product.id),
+      content_type: "product",
+      num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+    });
+
+    // Clear the cart
+    clearCart();
+
+    // Advance to order success step
+    setStep(3);
+  };
+
+  if (items.length === 0 && step !== 3) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-32 bg-brand-offwhite">
         <h1 className="text-3xl font-light text-brand-purple mb-4">Votre Panier est Vide</h1>
@@ -25,8 +62,41 @@ export default function Checkout() {
     );
   }
 
-  const deliveryFee = totalPrice >= 200 ? 0 : 25;
-  const finalTotal = totalPrice + deliveryFee;
+  if (step === 3) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center py-20 px-6 bg-brand-offwhite">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="max-w-md w-full bg-white p-8 rounded-3xl border border-brand-lavender/10 shadow-xl text-center"
+        >
+          <div className="w-16 h-16 bg-brand-gold/10 rounded-full flex items-center justify-center text-brand-gold mx-auto mb-6">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <h1 className="text-3xl font-light text-brand-purple mb-4">Commande Confirmée</h1>
+          <p className="text-brand-purple/70 text-sm mb-6 leading-relaxed font-light">
+            Merci pour votre confiance. Votre commande a été enregistrée avec succès sous le numéro <strong>#CH-{Math.floor(100000 + Math.random() * 900000)}</strong>.
+          </p>
+          <div className="bg-brand-offwhite p-5 rounded-2xl mb-8 text-left border border-brand-lavender/10">
+            <h4 className="text-xs uppercase tracking-[0.1em] font-medium text-brand-purple/60 mb-2">Résumé du Paiement</h4>
+            <div className="flex justify-between text-sm font-medium text-brand-purple">
+              <span className="font-light">Montant Payé</span>
+              <span className="text-brand-gold font-semibold">{purchaseAmount} MAD</span>
+            </div>
+          </div>
+          <Link 
+            href="/shop"
+            className="w-full bg-brand-purple text-brand-offwhite py-4 rounded-xl text-xs tracking-[0.2em] uppercase font-light hover:bg-brand-purple-light transition-colors block text-center shadow-lg shadow-brand-purple/20"
+          >
+            Continuer vos Achats
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <main className="flex-1 bg-brand-offwhite pt-8 pb-24">
@@ -152,7 +222,10 @@ export default function Checkout() {
                   <button onClick={() => setStep(1)} className="px-6 py-4 rounded-xl border border-brand-lavender/30 text-xs tracking-[0.2em] uppercase font-light text-brand-purple hover:bg-white transition-colors">
                     Retour
                   </button>
-                  <button className="flex-1 bg-brand-gold text-white py-4 rounded-xl text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-gold-light transition-colors shadow-lg shadow-brand-gold/20 flex items-center justify-center gap-2">
+                  <button 
+                    onClick={handlePayment}
+                    className="flex-1 bg-brand-gold text-white py-4 rounded-xl text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-gold-light transition-colors shadow-lg shadow-brand-gold/20 flex items-center justify-center gap-2"
+                  >
                     <Lock className="w-4 h-4" /> Payer {finalTotal} MAD
                   </button>
                 </div>

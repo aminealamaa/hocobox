@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { Product } from "./data";
+import * as fpixel from "./fpixel";
 
 export interface CartItem {
   product: Product;
@@ -44,6 +45,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return [...prev, { product, quantity, personalMessage }];
     });
     setIsOpen(true);
+
+    // Track AddToCart event with Meta Pixel
+    fpixel.event("AddToCart", {
+      content_name: product.name,
+      content_ids: [product.id],
+      content_type: "product",
+      value: product.price * quantity,
+      currency: "MAD",
+    });
   }, []);
 
   const removeItem = useCallback((productId: string) => {
