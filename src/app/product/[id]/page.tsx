@@ -107,6 +107,7 @@ export default function ProductPage() {
                 <button
                   key={idx}
                   onClick={() => setActiveImage(idx)}
+                  aria-label={`Afficher la photo ${idx + 1} du produit`}
                   className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
                     activeImage === idx ? "border-brand-gold" : "border-transparent opacity-60 hover:opacity-100"
                   }`}
@@ -206,9 +207,9 @@ export default function ProductPage() {
               {!showCheckout ? (
                 <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
                   <div className="flex items-center justify-between w-full sm:w-32 bg-white border border-brand-lavender/20 rounded-2xl px-2 h-14">
-                    <button onClick={() => setQty(Math.max(1, qty - 1))} className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Minus className="w-4 h-4" /></button>
+                    <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Diminuer la quantité" className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Minus className="w-4 h-4" /></button>
                     <span className="text-sm font-medium text-brand-purple">{qty}</span>
-                    <button onClick={() => setQty(qty + 1)} className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Plus className="w-4 h-4" /></button>
+                    <button onClick={() => setQty(qty + 1)} aria-label="Augmenter la quantité" className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Plus className="w-4 h-4" /></button>
                   </div>
 
                   <button 
@@ -221,6 +222,7 @@ export default function ProductPage() {
 
                   <button 
                     onClick={() => toggleWishlist(product.id)}
+                    aria-label="Ajouter aux favoris"
                     className={`w-14 h-14 shrink-0 rounded-2xl border flex items-center justify-center transition-all ${
                       wishlisted 
                         ? "bg-brand-purple border-brand-purple text-white shadow-lg shadow-brand-purple/20" 

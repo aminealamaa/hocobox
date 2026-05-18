@@ -45,6 +45,7 @@ export function CartDrawer() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
+                aria-label="Fermer le panier"
                 className="p-2 text-brand-purple/50 hover:text-brand-purple transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -103,6 +104,7 @@ export function CartDrawer() {
                           </div>
                           <button
                             onClick={() => removeItem(item.product.id)}
+                            aria-label={`Supprimer ${item.product.name} du panier`}
                             className="p-1 text-brand-purple/30 hover:text-red-500 transition-colors shrink-0"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -120,6 +122,7 @@ export function CartDrawer() {
                           <div className="flex items-center gap-0.5 bg-brand-lavender/10 rounded-xl">
                             <button
                               onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                              aria-label="Diminuer la quantité"
                               className="p-1.5 text-brand-purple/50 hover:text-brand-purple transition-colors"
                             >
                               <Minus className="w-3 h-3" />
@@ -129,6 +132,7 @@ export function CartDrawer() {
                             </span>
                             <button
                               onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                              aria-label="Augmenter la quantité"
                               className="p-1.5 text-brand-purple/50 hover:text-brand-purple transition-colors"
                             >
                               <Plus className="w-3 h-3" />
