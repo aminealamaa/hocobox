@@ -204,67 +204,69 @@ export default function ProductPage() {
               </div>
 
               {/* Actions */}
-              {!showCheckout ? (
-                <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
-                  <div className="flex items-center justify-between w-full sm:w-32 bg-white border border-brand-lavender/20 rounded-2xl px-2 h-14">
-                    <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Diminuer la quantité" className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Minus className="w-4 h-4" /></button>
-                    <span className="text-sm font-medium text-brand-purple">{qty}</span>
-                    <button onClick={() => setQty(qty + 1)} aria-label="Augmenter la quantité" className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Plus className="w-4 h-4" /></button>
-                  </div>
-
-                  <button 
-                    onClick={() => setShowCheckout(true)}
-                    className="flex-1 w-full bg-brand-gold text-white h-14 rounded-2xl text-sm md:text-base tracking-[0.1em] uppercase font-medium flex items-center justify-center gap-3 hover:bg-brand-gold-light transition-all shadow-lg shadow-brand-gold/20"
-                  >
-                    <ShoppingBag className="w-5 h-5" />
-                    Commander Maintenant
-                  </button>
-
-                  <button 
-                    onClick={() => toggleWishlist(product.id)}
-                    aria-label="Ajouter aux favoris"
-                    className={`w-14 h-14 shrink-0 rounded-2xl border flex items-center justify-center transition-all ${
-                      wishlisted 
-                        ? "bg-brand-purple border-brand-purple text-white shadow-lg shadow-brand-purple/20" 
-                        : "bg-white border-brand-lavender/20 text-brand-purple/40 hover:text-brand-gold hover:border-brand-gold/30"
-                    }`}
-                  >
-                    <Heart className={`w-5 h-5 ${wishlisted ? "fill-current" : ""}`} />
-                  </button>
-                </div>
-              ) : (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="mb-8 bg-white p-6 rounded-3xl border border-brand-gold shadow-lg shadow-brand-gold/10"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-medium text-brand-purple flex items-center gap-2">
-                      <ShieldCheck className="w-5 h-5 text-brand-gold" />
-                      Paiement Express
-                    </h3>
-                    <button onClick={() => setShowCheckout(false)} className="text-xs text-brand-purple/50 hover:text-brand-purple underline uppercase tracking-[0.1em]">Annuler</button>
-                  </div>
-                  
-                  <form onSubmit={(e) => { e.preventDefault(); setShowThankYou(true); setShowCheckout(false); }} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <input type="text" placeholder="Prénom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
-                      <input type="text" placeholder="Nom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
-                    </div>
-                    <input type="tel" placeholder="Numéro de Téléphone" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
-                    <textarea placeholder="Adresse de Livraison" required rows={2} className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light resize-none" />
-                    
-                    <div className="flex items-center justify-between py-4 border-y border-brand-lavender/20 my-4">
-                      <span className="text-sm font-light text-brand-purple">Montant Total</span>
-                      <span className="text-xl font-medium text-brand-gold">{product.price * qty} MAD</span>
+              <div id="checkout-section" className="mb-8">
+                {!showCheckout ? (
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="flex items-center justify-between w-full sm:w-32 bg-white border border-brand-lavender/20 rounded-2xl px-2 h-14">
+                      <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Diminuer la quantité" className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Minus className="w-4 h-4" /></button>
+                      <span className="text-sm font-medium text-brand-purple">{qty}</span>
+                      <button onClick={() => setQty(qty + 1)} aria-label="Augmenter la quantité" className="p-3 text-brand-purple/50 hover:text-brand-purple transition-colors"><Plus className="w-4 h-4" /></button>
                     </div>
 
-                    <button type="submit" className="w-full bg-brand-purple text-brand-offwhite h-14 rounded-2xl text-xs tracking-[0.2em] uppercase font-light flex items-center justify-center gap-3 hover:bg-brand-purple-light transition-all shadow-lg shadow-brand-purple/20">
-                      Passer la Commande (Paiement à la Livraison)
+                    <button 
+                      onClick={() => setShowCheckout(true)}
+                      className="flex-1 w-full bg-brand-gold text-white h-14 rounded-2xl text-sm md:text-base tracking-[0.1em] uppercase font-medium flex items-center justify-center gap-3 hover:bg-brand-gold-light transition-all shadow-lg shadow-brand-gold/20"
+                    >
+                      <ShoppingBag className="w-5 h-5" />
+                      Commander Maintenant
                     </button>
-                  </form>
-                </motion.div>
-              )}
+
+                    <button 
+                      onClick={() => toggleWishlist(product.id)}
+                      aria-label="Ajouter aux favoris"
+                      className={`w-14 h-14 shrink-0 rounded-2xl border flex items-center justify-center transition-all ${
+                        wishlisted 
+                          ? "bg-brand-purple border-brand-purple text-white shadow-lg shadow-brand-purple/20" 
+                          : "bg-white border-brand-lavender/20 text-brand-purple/40 hover:text-brand-gold hover:border-brand-gold/30"
+                      }`}
+                    >
+                      <Heart className={`w-5 h-5 ${wishlisted ? "fill-current" : ""}`} />
+                    </button>
+                  </div>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="bg-white p-6 rounded-3xl border border-brand-gold shadow-lg shadow-brand-gold/10"
+                  >
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-lg font-medium text-brand-purple flex items-center gap-2">
+                        <ShieldCheck className="w-5 h-5 text-brand-gold" />
+                        Paiement Express
+                      </h3>
+                      <button onClick={() => setShowCheckout(false)} className="text-xs text-brand-purple/50 hover:text-brand-purple underline uppercase tracking-[0.1em]">Annuler</button>
+                    </div>
+                    
+                    <form onSubmit={(e) => { e.preventDefault(); setShowThankYou(true); setShowCheckout(false); }} className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <input type="text" placeholder="Prénom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                        <input type="text" placeholder="Nom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                      </div>
+                      <input type="tel" placeholder="Numéro de Téléphone" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                      <textarea placeholder="Adresse de Livraison" required rows={2} className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light resize-none" />
+                      
+                      <div className="flex items-center justify-between py-4 border-y border-brand-lavender/20 my-4">
+                        <span className="text-sm font-light text-brand-purple">Montant Total</span>
+                        <span className="text-xl font-medium text-brand-gold">{product.price * qty} MAD</span>
+                      </div>
+
+                      <button type="submit" className="w-full bg-brand-purple text-brand-offwhite h-14 rounded-2xl text-xs tracking-[0.2em] uppercase font-light flex items-center justify-center gap-3 hover:bg-brand-purple-light transition-all shadow-lg shadow-brand-purple/20">
+                        Passer la Commande (Paiement à la Livraison)
+                      </button>
+                    </form>
+                  </motion.div>
+                )}
+              </div>
 
               {/* Features */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 py-6 border-t border-brand-lavender/20">
@@ -415,8 +417,10 @@ export default function ProductPage() {
         <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-brand-lavender/20 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] md:hidden">
           <button
             onClick={() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
               setShowCheckout(true);
+              setTimeout(() => {
+                document.getElementById("checkout-section")?.scrollIntoView({ behavior: "smooth", block: "center" });
+              }, 80);
             }}
             className="w-full bg-brand-gold text-white h-14 rounded-2xl text-sm tracking-[0.1em] uppercase font-medium flex items-center justify-center gap-3 shadow-lg shadow-brand-gold/20"
           >
