@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Heart, Minus, Plus, Star, Gift, Truck, ShieldCheck, Check, X } from "lucide-react";
 import { Product } from "@/lib/data";
@@ -22,7 +22,6 @@ export default function ProductPage() {
   const [personalMessage, setPersonalMessage] = useState("");
   const [addGiftMessage, setAddGiftMessage] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expressForm, setExpressForm] = useState({
     firstName: "",
@@ -62,9 +61,14 @@ export default function ProductPage() {
         }),
       });
       if (!res.ok) throw new Error("Failed to save order");
-      setShowThankYou(true);
-      setShowCheckout(false);
-      setExpressForm({ firstName: "", lastName: "", phone: "", address: "" });
+      const orderData = await res.json();
+      // Redirect to thank-you page for Meta Pixel tracking
+      const params = new URLSearchParams({
+        order: orderData.id || "",
+        total: orderTotal.toString(),
+        items: qty.toString(),
+      });
+      router.push(`/thank-you?${params.toString()}`);
     } catch (err) {
       console.error("Express order error:", err);
       alert("Une erreur est survenue. Veuillez réessayer.");
@@ -74,6 +78,7 @@ export default function ProductPage() {
   };
   
   const { addItem, toggleWishlist, isInWishlist } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     if (!id) return;
@@ -500,50 +505,7 @@ export default function ProductPage() {
         </div>
       )}
 
-      {/* Thank You Modal */}
-      <AnimatePresence>
-        {showThankYou && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-purple/60 backdrop-blur-md"
-          >
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-brand-offwhite p-10 lg:p-14 rounded-3xl max-w-lg w-full text-center relative border border-brand-gold/20 shadow-2xl"
-            >
-              <button 
-                onClick={() => setShowThankYou(false)}
-                className="absolute top-6 right-6 text-brand-purple/40 hover:text-brand-purple transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              
-              <div className="w-20 h-20 bg-brand-gold/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-brand-gold/30">
-                <Gift className="w-10 h-10 text-brand-gold" />
-              </div>
-              
-              <h2 className="text-3xl font-light text-brand-purple tracking-wide mb-4">
-                Merci pour votre commande
-              </h2>
-              
-              <p className="text-brand-purple/70 font-light leading-relaxed mb-8">
-                Votre commande a été confirmée. Nous vous contacterons sous peu pour organiser la livraison de vos chefs-d'œuvre en chocolat.
-              </p>
-              
-              <button 
-                onClick={() => setShowThankYou(false)}
-                className="w-full bg-brand-gold text-white py-4 rounded-xl text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-gold-light transition-colors"
-              >
-                Continuer vos achats
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </main>
   );
 }
