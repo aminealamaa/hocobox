@@ -11,6 +11,22 @@ export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
   const [step, setStep] = useState(1);
   const [purchaseAmount, setPurchaseAmount] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    phone: "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    apartment: "",
+    city: "",
+    country: "Maroc",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Track InitiateCheckout conversion when user loads the page with items in cart
   useEffect(() => {
@@ -27,24 +43,56 @@ export default function Checkout() {
   const deliveryFee = totalPrice >= 200 ? 0 : 25;
   const finalTotal = totalPrice + deliveryFee;
 
-  const handlePayment = () => {
-    // Save total price for the success screen
-    setPurchaseAmount(finalTotal);
+  const handlePayment = async () => {
+    setIsSubmitting(true);
+    try {
+      const orderItems = items.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+        price: item.product.price,
+      }));
 
-    // Track standard Purchase event with Meta Pixel
-    fpixel.event("Purchase", {
-      value: finalTotal,
-      currency: "MAD",
-      content_ids: items.map((item) => item.product.id),
-      content_type: "product",
-      num_items: items.reduce((sum, item) => sum + item.quantity, 0),
-    });
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          phone: formData.phone,
+          address: formData.apartment ? `${formData.address}, ${formData.apartment}` : formData.address,
+          city: formData.city,
+          total: finalTotal,
+          notes: `Email: ${formData.email} | Pays: ${formData.country}`,
+          items: orderItems,
+        }),
+      });
 
-    // Clear the cart
-    clearCart();
+      if (!res.ok) {
+        throw new Error("Failed to save order to database");
+      }
 
-    // Advance to order success step
-    setStep(3);
+      // Save total price for the success screen
+      setPurchaseAmount(finalTotal);
+
+      // Track standard Purchase event with Meta Pixel
+      fpixel.event("Purchase", {
+        value: finalTotal,
+        currency: "MAD",
+        content_ids: items.map((item) => item.product.id),
+        content_type: "product",
+        num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+      });
+
+      // Clear the cart
+      clearCart();
+
+      // Advance to order success step
+      setStep(3);
+    } catch (err) {
+      console.error("Order submission error:", err);
+      alert("Une erreur est survenue lors de l'enregistrement de votre commande. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (items.length === 0 && step !== 3) {
@@ -140,10 +188,26 @@ export default function Checkout() {
                     <h3 className="text-sm font-medium text-brand-purple uppercase tracking-[0.1em] mb-4">Informations de Contact</h3>
                     <div className="space-y-4">
                       <div>
-                        <input type="email" placeholder="Adresse e-mail" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
+                        <input 
+                          type="email" 
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="Adresse e-mail" 
+                          required 
+                          className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                        />
                       </div>
                       <div>
-                        <input type="tel" placeholder="Numéro de téléphone" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
+                        <input 
+                          type="tel" 
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          placeholder="Numéro de téléphone" 
+                          required 
+                          className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                        />
                       </div>
                     </div>
                   </div>
@@ -152,16 +216,60 @@ export default function Checkout() {
                   <div className="bg-white p-6 rounded-3xl border border-brand-lavender/10 shadow-sm">
                     <h3 className="text-sm font-medium text-brand-purple uppercase tracking-[0.1em] mb-4">Adresse de Livraison</h3>
                     <div className="grid grid-cols-2 gap-4">
-                      <input type="text" placeholder="Prénom" required className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
-                      <input type="text" placeholder="Nom" required className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
-                      <input type="text" placeholder="Adresse" required className="col-span-2 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
-                      <input type="text" placeholder="Appartement, suite, etc. (optionnel)" className="col-span-2 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
-                      <input type="text" placeholder="Ville" required className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" />
-                      <select className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light appearance-none text-brand-purple/70">
-                        <option>Émirats Arabes Unis</option>
-                        <option>Arabie Saoudite</option>
-                        <option>Qatar</option>
-                        <option>Maroc</option>
+                      <input 
+                        type="text" 
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        placeholder="Prénom" 
+                        required 
+                        className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                      />
+                      <input 
+                        type="text" 
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        placeholder="Nom" 
+                        required 
+                        className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                      />
+                      <input 
+                        type="text" 
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        placeholder="Adresse" 
+                        required 
+                        className="col-span-2 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                      />
+                      <input 
+                        type="text" 
+                        name="apartment"
+                        value={formData.apartment}
+                        onChange={handleChange}
+                        placeholder="Appartement, suite, etc. (optionnel)" 
+                        className="col-span-2 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                      />
+                      <input 
+                        type="text" 
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        placeholder="Ville" 
+                        required 
+                        className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light" 
+                      />
+                      <select 
+                        name="country"
+                        value={formData.country}
+                        onChange={handleChange}
+                        className="col-span-1 border border-brand-lavender/30 rounded-xl px-4 py-3 bg-transparent focus:border-brand-purple outline-none transition-colors text-sm font-light appearance-none text-brand-purple/70"
+                      >
+                        <option value="Émirats Arabes Unis">Émirats Arabes Unis</option>
+                        <option value="Arabie Saoudite">Arabie Saoudite</option>
+                        <option value="Qatar">Qatar</option>
+                        <option value="Maroc">Maroc</option>
                       </select>
                     </div>
                   </div>
@@ -219,14 +327,15 @@ export default function Checkout() {
                 </div>
 
                 <div className="flex gap-4">
-                  <button onClick={() => setStep(1)} className="px-6 py-4 rounded-xl border border-brand-lavender/30 text-xs tracking-[0.2em] uppercase font-light text-brand-purple hover:bg-white transition-colors">
+                  <button onClick={() => setStep(1)} disabled={isSubmitting} className="px-6 py-4 rounded-xl border border-brand-lavender/30 text-xs tracking-[0.2em] uppercase font-light text-brand-purple hover:bg-white transition-colors disabled:opacity-50">
                     Retour
                   </button>
                   <button 
                     onClick={handlePayment}
-                    className="flex-1 bg-brand-gold text-white py-4 rounded-xl text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-gold-light transition-colors shadow-lg shadow-brand-gold/20 flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                    className="flex-1 bg-brand-gold text-white py-4 rounded-xl text-xs tracking-[0.2em] uppercase font-medium hover:bg-brand-gold-light transition-colors shadow-lg shadow-brand-gold/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Lock className="w-4 h-4" /> Payer {finalTotal} MAD
+                    <Lock className="w-4 h-4" /> {isSubmitting ? "Traitement..." : `Payer ${finalTotal} MAD`}
                   </button>
                 </div>
               </motion.div>
@@ -293,3 +402,4 @@ export default function Checkout() {
     </main>
   );
 }
+

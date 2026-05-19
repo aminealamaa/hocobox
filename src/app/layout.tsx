@@ -6,6 +6,8 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CartDrawer } from "@/components/cart-drawer";
 import FacebookPixel from "@/components/facebook-pixel";
+import { Analytics } from "@vercel/analytics/next";
+import { WhatsappFloat } from "@/components/whatsapp-float";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-serif", weight: ['300', '400', '500', '600', '700'], style: ['normal', 'italic'] });
@@ -24,6 +26,8 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} ${cormorant.variable} font-sans min-h-screen flex flex-col bg-brand-offwhite text-brand-purple antialiased selection:bg-brand-lavender selection:text-brand-purple`}>
         <FacebookPixel />
+        <Analytics />
+        <WhatsappFloat />
         <CartProvider>
           <Navbar />
           <CartDrawer />
