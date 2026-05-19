@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Heart, Minus, Plus, Star, Gift, Truck, ShieldCheck, Check, X } from "lucide-react";
+import { ShoppingBag, Heart, Minus, Plus, Star, Gift, Truck, ShieldCheck, Check, X, Clock, MapPin, Eye, Users, Award, RotateCcw, Flame } from "lucide-react";
 import { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart-store";
 import { ProductCard } from "@/components/product-card";
@@ -28,9 +28,56 @@ export default function ProductPage() {
     lastName: "",
     phone: "",
     address: "",
+    city: "Casablanca",
   });
 
-  const handleExpressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // CRO: Countdown timer (resets daily at midnight)
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      const endOfDay = new Date(now);
+      endOfDay.setHours(23, 59, 59, 999);
+      const diff = endOfDay.getTime() - now.getTime();
+      setTimeLeft({
+        hours: Math.floor(diff / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000),
+      });
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // CRO: Simulated live viewers count
+  const [viewers, setViewers] = useState(0);
+  useEffect(() => {
+    setViewers(Math.floor(12 + Math.random() * 15));
+    const interval = setInterval(() => {
+      setViewers((prev) => {
+        const change = Math.random() > 0.5 ? 1 : -1;
+        return Math.max(8, Math.min(30, prev + change));
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // CRO: Recent order notification
+  const [recentOrder, setRecentOrder] = useState<{ city: string; time: string } | null>(null);
+  useEffect(() => {
+    const cities = ["Casablanca", "Rabat", "Marrakech", "Tanger", "F\u00e8s", "Agadir", "Mekn\u00e8s", "Oujda", "K\u00e9nitra"];
+    const times = ["il y a 3 min", "il y a 7 min", "il y a 12 min", "il y a 18 min", "il y a 25 min"];
+    const show = () => {
+      setRecentOrder({ city: cities[Math.floor(Math.random() * cities.length)], time: times[Math.floor(Math.random() * times.length)] });
+      setTimeout(() => setRecentOrder(null), 4000);
+    };
+    const timeout = setTimeout(show, 6000);
+    const interval = setInterval(show, 18000);
+    return () => { clearTimeout(timeout); clearInterval(interval); };
+  }, []);
+
+  const handleExpressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setExpressForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -48,7 +95,7 @@ export default function ProductPage() {
           customerName: `${expressForm.firstName} ${expressForm.lastName}`,
           phone: expressForm.phone,
           address: expressForm.address,
-          city: "—",
+          city: expressForm.city,
           total: orderTotal,
           notes: personalMessage ? `Message cadeau: ${personalMessage}` : "Paiement à la livraison",
           items: [
@@ -205,17 +252,54 @@ export default function ProductPage() {
               <h1 className="text-4xl lg:text-5xl font-serif text-brand-purple tracking-wide mb-2 leading-tight">{product.name}</h1>
               {product.nameAr && <p className="text-2xl font-serif text-brand-gold/80 mb-6" dir="rtl">{product.nameAr}</p>}
               
-              <div className="flex items-end gap-4 mb-6 pb-6 border-b border-brand-lavender/20">
+              {/* Savings Badge */}
+              <div className="flex items-end gap-4 mb-4 pb-4 border-b border-brand-lavender/20">
                 <span className="text-3xl font-light text-brand-gold">{product.price} MAD</span>
-                {product.originalPrice && <span className="text-lg text-brand-purple/30 line-through mb-1">{product.originalPrice} MAD</span>}
+                {product.originalPrice && (
+                  <>
+                    <span className="text-lg text-brand-purple/30 line-through mb-1">{product.originalPrice} MAD</span>
+                    <span className="bg-red-500/10 text-red-600 text-xs font-semibold px-3 py-1 rounded-full mb-1 flex items-center gap-1">
+                      <Flame className="w-3 h-3" /> -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                    </span>
+                  </>
+                )}
               </div>
 
-              {/* Scarcity Offer Card */}
+              {/* CRO: Savings + Free Shipping + COD Banner */}
+              <div className="grid grid-cols-1 gap-2 mb-6">
+                {product.originalPrice && (
+                  <div className="flex items-center gap-2 bg-green-50 border border-green-200/60 rounded-xl px-4 py-2.5">
+                    <span className="text-green-600 text-xs font-medium">🎉 Vous économisez {product.originalPrice - product.price} MAD</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 bg-blue-50/80 border border-blue-200/40 rounded-xl px-4 py-2.5">
+                  <Truck className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-blue-700 text-xs font-medium">Livraison GRATUITE partout au Maroc 🇲🇦</span>
+                </div>
+                <div className="flex items-center gap-2 bg-amber-50/80 border border-amber-200/40 rounded-xl px-4 py-2.5">
+                  <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span className="text-amber-700 text-xs font-medium">💰 Paiement à la livraison — الدفع عند الاستلام</span>
+                </div>
+              </div>
+
+              {/* CRO: Live viewers */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-1.5 bg-brand-purple/5 border border-brand-purple/10 rounded-full px-3 py-1.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                  </span>
+                  <Eye className="w-3 h-3 text-brand-purple/60" />
+                  <span className="text-[11px] font-medium text-brand-purple/70">{viewers} personnes regardent ce produit</span>
+                </div>
+              </div>
+
+              {/* Scarcity Offer Card with Countdown */}
               <motion.div 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-8 p-4 bg-brand-gold/5 rounded-2xl border border-brand-gold/20 flex flex-col gap-3 shadow-sm shadow-brand-gold/5"
+                className="mb-6 p-4 bg-brand-gold/5 rounded-2xl border border-brand-gold/20 flex flex-col gap-3 shadow-sm shadow-brand-gold/5"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -225,7 +309,7 @@ export default function ProductPage() {
                     </span>
                     <span className="text-xs font-semibold tracking-wider text-brand-gold uppercase">Offre Limitée</span>
                   </div>
-                  <span className="text-xs text-brand-purple/70 font-medium">Seulement 50 coffrets disponibles ce mois-ci</span>
+                  <span className="text-xs text-brand-purple/70 font-medium">Seulement 50 coffrets ce mois</span>
                 </div>
                 <div className="w-full bg-brand-lavender/20 h-1.5 rounded-full overflow-hidden">
                   <motion.div 
@@ -239,22 +323,36 @@ export default function ProductPage() {
                   <span className="flex items-center gap-1">✨ <strong className="font-semibold">42 coffrets</strong> confectionnés et réservés</span>
                   <span className="font-medium text-brand-gold">8 restants</span>
                 </div>
+                {/* CRO: Countdown Timer */}
+                <div className="flex items-center gap-2 pt-2 border-t border-brand-gold/15">
+                  <Clock className="w-3.5 h-3.5 text-red-500" />
+                  <span className="text-[11px] font-medium text-red-600">Cette offre expire dans</span>
+                  <div className="flex items-center gap-1 ml-auto">
+                    <span className="bg-brand-purple text-white text-[11px] font-bold px-1.5 py-0.5 rounded min-w-[24px] text-center">{String(timeLeft.hours).padStart(2, '0')}</span>
+                    <span className="text-brand-purple/40 text-[10px] font-bold">:</span>
+                    <span className="bg-brand-purple text-white text-[11px] font-bold px-1.5 py-0.5 rounded min-w-[24px] text-center">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                    <span className="text-brand-purple/40 text-[10px] font-bold">:</span>
+                    <span className="bg-red-500 text-white text-[11px] font-bold px-1.5 py-0.5 rounded min-w-[24px] text-center animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                  </div>
+                </div>
               </motion.div>
 
-              {/* Description */}
-              <p className="text-brand-purple/70 font-light leading-relaxed mb-8">
+              <p className="text-brand-purple/70 font-light leading-relaxed mb-6">
                 {product.description}
               </p>
 
-              {/* Specs */}
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-white p-4 rounded-2xl border border-brand-lavender/10">
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="bg-white p-3 rounded-2xl border border-brand-lavender/10 text-center">
                   <span className="block text-[10px] tracking-[0.1em] uppercase text-brand-purple/40 mb-1">Contenu</span>
-                  <span className="text-sm text-brand-purple font-medium">{product.pieces} Pièces Exquises</span>
+                  <span className="text-sm text-brand-purple font-medium">{product.pieces} Pièces</span>
                 </div>
-                <div className="bg-white p-4 rounded-2xl border border-brand-lavender/10">
+                <div className="bg-white p-3 rounded-2xl border border-brand-lavender/10 text-center">
                   <span className="block text-[10px] tracking-[0.1em] uppercase text-brand-purple/40 mb-1">Poids Net</span>
                   <span className="text-sm text-brand-purple font-medium">{product.weight}</span>
+                </div>
+                <div className="bg-white p-3 rounded-2xl border border-brand-lavender/10 text-center">
+                  <span className="block text-[10px] tracking-[0.1em] uppercase text-brand-purple/40 mb-1">Livraison</span>
+                  <span className="text-sm text-brand-purple font-medium">24-48h</span>
                 </div>
               </div>
 
@@ -338,30 +436,61 @@ export default function ProductPage() {
                         <input type="text" name="lastName" value={expressForm.lastName} onChange={handleExpressChange} placeholder="Nom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
                       </div>
                       <input type="tel" name="phone" value={expressForm.phone} onChange={handleExpressChange} placeholder="Numéro de Téléphone" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                      <select name="city" value={expressForm.city} onChange={handleExpressChange} className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light appearance-none">
+                        <option value="Casablanca">Casablanca</option>
+                        <option value="Rabat">Rabat</option>
+                        <option value="Marrakech">Marrakech</option>
+                        <option value="Tanger">Tanger</option>
+                        <option value="Fès">Fès</option>
+                        <option value="Agadir">Agadir</option>
+                        <option value="Meknès">Meknès</option>
+                        <option value="Oujda">Oujda</option>
+                        <option value="Kénitra">Kénitra</option>
+                        <option value="Autre">Autre ville</option>
+                      </select>
                       <textarea name="address" value={expressForm.address} onChange={handleExpressChange} placeholder="Adresse de Livraison" required rows={2} className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light resize-none" />
                       
-                      <div className="flex items-center justify-between py-4 border-y border-brand-lavender/20 my-4">
+                      {/* CRO: Delivery estimate based on city */}
+                      <div className="flex items-center gap-2 bg-green-50 rounded-xl px-4 py-2.5 border border-green-200/60">
+                        <MapPin className="w-4 h-4 text-green-600 shrink-0" />
+                        <span className="text-green-700 text-xs font-medium">
+                          {expressForm.city === "Casablanca" || expressForm.city === "Rabat" 
+                            ? `Livraison ${expressForm.city}: Demain avant 18h 🚀`
+                            : `Livraison ${expressForm.city}: 24-48h ✓`
+                          }
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between py-4 border-y border-brand-lavender/20 my-2">
                         <span className="text-sm font-light text-brand-purple">Montant Total</span>
-                        <span className="text-xl font-medium text-brand-gold">{product.price * qty} MAD</span>
+                        <div className="text-right">
+                          <span className="text-xl font-medium text-brand-gold block">{product.price * qty} MAD</span>
+                          <span className="text-[10px] text-green-600 font-medium">Livraison GRATUITE incluse</span>
+                        </div>
                       </div>
 
                       <button type="submit" disabled={isSubmitting} className="w-full bg-brand-purple text-brand-offwhite h-14 rounded-2xl text-xs tracking-[0.2em] uppercase font-light flex items-center justify-center gap-3 hover:bg-brand-purple-light transition-all shadow-lg shadow-brand-purple/20 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {isSubmitting ? "Traitement en cours..." : "Passer la Commande (Paiement à la Livraison)"}
+                        {isSubmitting ? "Traitement en cours..." : "Confirmer — Paiement à la Livraison"}
                       </button>
+                      <p className="text-center text-[10px] text-brand-purple/40 font-light">🔒 Vos données sont protégées et ne seront jamais partagées</p>
                     </form>
                   </motion.div>
                 )}
               </div>
 
-              {/* Features */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 py-6 border-t border-brand-lavender/20">
-                <div className="flex items-center gap-3">
-                  <Truck className="w-4 h-4 text-brand-gold" />
-                  <span className="text-xs text-brand-purple/60 font-light">Livraison sous température contrôlée</span>
+              {/* Trust Strip */}
+              <div className="grid grid-cols-3 gap-3 py-5 border-t border-brand-lavender/20">
+                <div className="flex flex-col items-center gap-1.5 text-center">
+                  <Award className="w-5 h-5 text-brand-gold" />
+                  <span className="text-[10px] text-brand-purple/60 font-light leading-tight">Qualité Garantie</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <ShieldCheck className="w-4 h-4 text-brand-gold" />
-                  <span className="text-xs text-brand-purple/60 font-light">Paiement 100% Sécurisé</span>
+                <div className="flex flex-col items-center gap-1.5 text-center">
+                  <RotateCcw className="w-5 h-5 text-brand-gold" />
+                  <span className="text-[10px] text-brand-purple/60 font-light leading-tight">Échange Gratuit</span>
+                </div>
+                <div className="flex flex-col items-center gap-1.5 text-center">
+                  <ShieldCheck className="w-5 h-5 text-brand-gold" />
+                  <span className="text-[10px] text-brand-purple/60 font-light leading-tight">Paiement Sécurisé</span>
                 </div>
               </div>
 
@@ -505,6 +634,26 @@ export default function ProductPage() {
         </div>
       )}
 
+      {/* CRO: Recent Order Notification Toast */}
+      <AnimatePresence>
+        {recentOrder && (
+          <motion.div
+            initial={{ opacity: 0, y: 80, x: 0 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: 80 }}
+            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            className="fixed bottom-20 md:bottom-6 left-4 z-50 bg-white rounded-2xl shadow-2xl shadow-brand-purple/15 border border-brand-lavender/20 p-4 flex items-center gap-3 max-w-xs"
+          >
+            <div className="w-10 h-10 bg-brand-gold/10 rounded-full flex items-center justify-center shrink-0">
+              <ShoppingBag className="w-5 h-5 text-brand-gold" />
+            </div>
+            <div>
+              <p className="text-xs font-medium text-brand-purple">Quelqu&apos;un à <strong className="text-brand-gold">{recentOrder.city}</strong> vient de commander</p>
+              <p className="text-[10px] text-brand-purple/40 mt-0.5">{recentOrder.time}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </main>
   );
