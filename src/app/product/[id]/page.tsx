@@ -23,6 +23,55 @@ export default function ProductPage() {
   const [addGiftMessage, setAddGiftMessage] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [expressForm, setExpressForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    address: "",
+  });
+
+  const handleExpressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setExpressForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleExpressSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!product) return;
+    setIsSubmitting(true);
+    try {
+      const orderTotal = product.price * qty;
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: `${expressForm.firstName} ${expressForm.lastName}`,
+          phone: expressForm.phone,
+          address: expressForm.address,
+          city: "—",
+          total: orderTotal,
+          notes: personalMessage ? `Message cadeau: ${personalMessage}` : "Paiement à la livraison",
+          items: [
+            {
+              productId: product.id,
+              quantity: qty,
+              price: product.price,
+            },
+          ],
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to save order");
+      setShowThankYou(true);
+      setShowCheckout(false);
+      setExpressForm({ firstName: "", lastName: "", phone: "", address: "" });
+    } catch (err) {
+      console.error("Express order error:", err);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   const { addItem, toggleWishlist, isInWishlist } = useCart();
 
@@ -278,21 +327,21 @@ export default function ProductPage() {
                       <button onClick={() => setShowCheckout(false)} className="text-xs text-brand-purple/50 hover:text-brand-purple underline uppercase tracking-[0.1em]">Annuler</button>
                     </div>
                     
-                    <form onSubmit={(e) => { e.preventDefault(); setShowThankYou(true); setShowCheckout(false); }} className="space-y-4">
+                    <form onSubmit={handleExpressSubmit} className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="Prénom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
-                        <input type="text" placeholder="Nom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                        <input type="text" name="firstName" value={expressForm.firstName} onChange={handleExpressChange} placeholder="Prénom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                        <input type="text" name="lastName" value={expressForm.lastName} onChange={handleExpressChange} placeholder="Nom" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
                       </div>
-                      <input type="tel" placeholder="Numéro de Téléphone" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
-                      <textarea placeholder="Adresse de Livraison" required rows={2} className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light resize-none" />
+                      <input type="tel" name="phone" value={expressForm.phone} onChange={handleExpressChange} placeholder="Numéro de Téléphone" required className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light" />
+                      <textarea name="address" value={expressForm.address} onChange={handleExpressChange} placeholder="Adresse de Livraison" required rows={2} className="w-full border border-brand-lavender/30 rounded-xl px-4 py-3 bg-brand-offwhite focus:border-brand-gold outline-none transition-colors text-sm font-light resize-none" />
                       
                       <div className="flex items-center justify-between py-4 border-y border-brand-lavender/20 my-4">
                         <span className="text-sm font-light text-brand-purple">Montant Total</span>
                         <span className="text-xl font-medium text-brand-gold">{product.price * qty} MAD</span>
                       </div>
 
-                      <button type="submit" className="w-full bg-brand-purple text-brand-offwhite h-14 rounded-2xl text-xs tracking-[0.2em] uppercase font-light flex items-center justify-center gap-3 hover:bg-brand-purple-light transition-all shadow-lg shadow-brand-purple/20">
-                        Passer la Commande (Paiement à la Livraison)
+                      <button type="submit" disabled={isSubmitting} className="w-full bg-brand-purple text-brand-offwhite h-14 rounded-2xl text-xs tracking-[0.2em] uppercase font-light flex items-center justify-center gap-3 hover:bg-brand-purple-light transition-all shadow-lg shadow-brand-purple/20 disabled:opacity-50 disabled:cursor-not-allowed">
+                        {isSubmitting ? "Traitement en cours..." : "Passer la Commande (Paiement à la Livraison)"}
                       </button>
                     </form>
                   </motion.div>
