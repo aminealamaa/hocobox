@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Gift, CheckCircle, Truck, Phone, ShoppingBag } from "lucide-react";
 import * as fpixel from "@/lib/fpixel";
 
-export default function ThankYouPage() {
+function ThankYouContent() {
   const searchParams = useSearchParams();
   const hasFiredPixel = useRef(false);
 
@@ -154,5 +154,20 @@ export default function ThankYouPage() {
         </motion.p>
       </motion.div>
     </main>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={
+      <main className="flex-1 bg-brand-offwhite min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-brand-purple border-t-transparent animate-spin" />
+          <p className="text-brand-purple/60 font-light tracking-widest text-xs uppercase animate-pulse">Chargement...</p>
+        </div>
+      </main>
+    }>
+      <ThankYouContent />
+    </Suspense>
   );
 }
